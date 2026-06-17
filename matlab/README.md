@@ -104,20 +104,29 @@ Obiektu tego **nie da się utworzyć poza MATLAB-em** (to klasa z RF Toolbox),
 dlatego plik generuje się jednym uruchomieniem skryptu:
 
 ```matlab
-generuj_plik_mat            % tworzy rfbudget_1500MHz.mat
+generuj_plik_mat            % tworzy rfbudget_uklad.mat
 ```
 
 Otwarcie gotowego pliku w aplikacji (dowolny sposób):
 
 ```matlab
-rfBudgetAnalyzer('rfbudget_1500MHz.mat')   % bezposrednio z pliku
+rfBudgetAnalyzer('rfbudget_uklad.mat')   % bezposrednio z pliku
 % albo
-load('rfbudget_1500MHz.mat','rfb');  show(rfb)
+load('rfbudget_uklad.mat','rfb');  show(rfb)
 % albo: APPS -> RF Budget Analyzer -> Open -> wybierz plik
 ```
 
-Parametry zapisane w pliku są zgodne z bilansem (f = 1500 MHz, Gtx ≈ 9 dBi,
-Grx ≈ 14 dBi, kable 2 m + 4 m), a układ odwzorowuje 7‑elementowy schemat z obrazka.
+Układ odwzorowuje **1:1 schemat z obrazka** (f = 1500 MHz, Pin = −20 dBm, BW = 20 MHz):
+
+| # | Element | GainT [dB] | NF [dB] | OIP3 [dBm] |
+|---|---------|-----------:|--------:|-----------:|
+| 1 | Filter | −6.005 | 0 | Inf |
+| 2 | Attenuator | −3 | 3 | Inf |
+| 3 | Amplifier | 0 | 0 | Inf |
+| 4 | Antenna | 6 | 0 | Inf |
+| 5 | Amplifier | 0 | 0 | Inf |
+| 6 | Attenuator | −3 | 3 | Inf |
+| 7 | Filter | −6.005 | 0 | Inf |
 
 ## Przeszkody radiowe — `przeszkody_radiowe.m`
 
