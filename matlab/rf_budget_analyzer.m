@@ -11,7 +11,9 @@
 %  oraz tlumienie wolnej przestrzeni (FSPL): G4 = Gtx + Grx - FSPL.
 %
 %  Parametry pochodza z obliczen z problemu 2 (bilans) oraz problemu 1 (ITU):
-%     f   = 1500 MHz,  G_anteny = 10 dBi (sr.),  kable 0.5 dB/m (2 m + 4 m).
+%     f   = 1500 MHz,  Ptx = 10..20 dBm,  Pmin = -90 dBm,
+%     Gtx = 2..16 dBi (sr. 9),  Grx = 10..18 dBi (sr. 14),
+%     kable 0.5 dB/m (2 m nadawczy + 4 m odbiorczy).
 %
 %  WYMAGA: RF Toolbox (funkcje rfbudget, rfelement, amplifier).
 %  Uruchomienie: rf_budget_analyzer
@@ -22,11 +24,12 @@ clear; clc; close all;
 %% ------------------------- DANE WEJSCIOWE -------------------------------
 c    = 299792458;        % [m/s]
 f    = 1500e6;           % [Hz]  czestotliwosc (zadanie nr 3)
-Pin  = 20;               % [dBm] dostepna moc wejsciowa (moc nadawcza Ptx)
+Pin  = 20;               % [dBm] dostepna moc wejsciowa = moc nadawcza Ptx_max (10..20 dBm)
 BW   = 20e6;             % [Hz]  pasmo sygnalu
 
-Gtx  = 10;               % [dBi] wzmocnienie anteny nadawczej (srednie)
-Grx  = 10;               % [dBi] wzmocnienie anteny odbiorczej (srednie)
+% Wzmocnienia anten - wartosci srednie z zalozen problemu 2:
+Gtx  = (2  + 16)/2;      % [dBi] antena nadawcza  (zakres 2..16 dBi)  -> 9 dBi
+Grx  = (10 + 18)/2;      % [dBi] antena odbiorcza (zakres 10..18 dBi) -> 14 dBi
 d0   = 1000;             % [m]   odleglosc lacza dla modelu glownego
 
 % Tlumienie wolnej przestrzeni dla d0

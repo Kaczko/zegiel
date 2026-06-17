@@ -29,8 +29,9 @@ przeszkody_radiowe
 - Odcinek nadawczy (nadajnik → antena): **2 m**.
 - Odcinek odbiorczy (antena → odbiornik): **4 m**.
 - Tłumienie jednostkowe kabla: **0,5 dB/m** ⇒ strata toru nadawczego 1 dB, odbiorczego 2 dB.
-- Wzmocnienie anten: zakres **2–18 dBi** (zgodny z zakresem `GiT` z problemu 1).
-- Moc nadawcza: skrajne wartości **10–20 dBm**.
+- Moc nadawcza: **10–20 dBm**; czułość odbiornika: **−90 dBm**.
+- Antena nadawcza: **2–16 dBi**; antena odbiorcza: **10–18 dBi**.
+- (Problem 1 / ITU-R P.341 używa osobnego zakresu `GiT` = **2–18 dBi**.)
 
 Tłumienie wolnej przestrzeni (FSPL):
 
@@ -51,10 +52,10 @@ Prx = Ptx + Gtx + Grx − L_tx − L_rx − FSPL(d)
 Margines mocy: `M = Prx − Pmin`, gdzie `Pmin` to czułość odbiornika (domyślnie −90 dBm).
 
 Analizowane **3 punkty pomiarowe** (wg skrajnych/średnich wartości mocy nadawczej
-i wzmocnienia anten):
+i wzmocnienia anten — Tx 2–16 dBi, Rx 10–18 dBi):
 
-- **strata MINIMALNA** (najlepszy przypadek): `Ptx_max`, `G_max`,
-- **strata MAKSYMALNA** (najgorszy przypadek): `Ptx_min`, `G_min`,
+- **strata MINIMALNA** (najlepszy przypadek): `Ptx_max`, `Gtx_max`, `Grx_max`,
+- **strata MAKSYMALNA** (najgorszy przypadek): `Ptx_min`, `Gtx_min`, `Grx_min`,
 - **strata ŚREDNIA** (typowy przypadek): wartości średnie.
 
 Wynik: tabela w konsoli oraz wykresy `Prx(d)` i `M(d)` dla odległości 500 m … 5 km

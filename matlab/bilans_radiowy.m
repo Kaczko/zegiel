@@ -5,11 +5,18 @@
 %  Program oblicza moc odbieran  (Rx) oraz margines mocy (Rx - czulosc
 %  odbiornika) w funkcji odleglosci od 500 m do 5 km (krok 500 m).
 %
+%  Zalozenia:
+%     f   = 1500 MHz
+%     Ptx = 10..20 dBm           (moc nadawcza)
+%     Pmin= -90 dBm              (czulosc odbiornika)
+%     Gtx = 2..16 dBi            (antena nadawcza)
+%     Grx = 10..18 dBi           (antena odbiorcza)
+%
 %  Analizowane sa 3 punkty pomiarowe wyznaczone skrajnymi/srednimi
 %  wartosciami mocy nadawczej oraz wzmocnienia anten:
-%     - strata MINIMALNA  (najlepszy przypadek): Ptx_max, G_max
-%     - strata MAKSYMALNA (najgorszy przypadek): Ptx_min, G_min
-%     - strata SREDNIA    (przypadek typowy)    : Ptx_sr , G_sr
+%     - strata MINIMALNA  (najlepszy przypadek): Ptx_max, Gtx_max, Grx_max
+%     - strata MAKSYMALNA (najgorszy przypadek): Ptx_min, Gtx_min, Grx_min
+%     - strata SREDNIA    (przypadek typowy)    : wartosci srednie
 %
 %  Odcinek nadawczy (nadajnik -> antena)  = 2 m
 %  Odcinek odbiorczy (antena -> odbiornik)= 4 m
@@ -28,11 +35,9 @@ Ptx_min = 10;           % [dBm]  (= 10 mW)
 Ptx_max = 20;           % [dBm]  (= 100 mW)
 Ptx_sr  = (Ptx_min + Ptx_max)/2;
 
-% Wzmocnienie pojedynczej anteny - wartosci skrajne [dBi]
-% (zakres zgodny z norma ITU-R P.341 uzyta w problemie 1: 2 - 18 dBi)
-G_min = 2;              % [dBi]
-G_max = 18;             % [dBi]
-G_sr  = (G_min + G_max)/2;
+% Wzmocnienie anten - wartosci skrajne [dBi] (TX i RX rozne zakresy)
+Gtx_min = 2;   Gtx_max = 16;   Gtx_sr = (Gtx_min + Gtx_max)/2;   % antena nadawcza 2-16 dBi
+Grx_min = 10;  Grx_max = 18;   Grx_sr = (Grx_min + Grx_max)/2;   % antena odbiorcza 10-18 dBi
 
 % Tlumienie kabli zasilajacych anteny
 alpha_kabel = 0.5;      % [dB/m] tlumienie jednostkowe kabla @1500 MHz
@@ -57,11 +62,11 @@ FSPL = 20*log10(d) + 20*log10(f) + 20*log10(4*pi/c);    % wektor wzgledem d
 
 %% ------------------------ MOC ODBIERANA (Rx) ----------------------------
 % Prx = Ptx + Gtx + Grx - L_tx - L_rx - L_misc - FSPL
-% (Gtx oraz Grx przyjmuja te same wartosci skrajne -> 2*G)
+% (antena nadawcza i odbiorcza maja rozne zakresy wzmocnienia)
 
-Prx_best  = (Ptx_max + 2*G_max) - L_tor - L_misc - FSPL;   % strata MIN
-Prx_worst = (Ptx_min + 2*G_min) - L_tor - L_misc - FSPL;   % strata MAX
-Prx_avg   = (Ptx_sr  + 2*G_sr ) - L_tor - L_misc - FSPL;   % strata SR
+Prx_best  = (Ptx_max + Gtx_max + Grx_max) - L_tor - L_misc - FSPL;   % strata MIN
+Prx_worst = (Ptx_min + Gtx_min + Grx_min) - L_tor - L_misc - FSPL;   % strata MAX
+Prx_avg   = (Ptx_sr  + Gtx_sr  + Grx_sr ) - L_tor - L_misc - FSPL;   % strata SR
 
 %% --------------------------- MARGINES MOCY ------------------------------
 M_best  = Prx_best  - Pmin;
@@ -72,8 +77,8 @@ M_avg   = Prx_avg   - Pmin;
 fprintf('\n=========================================================\n');
 fprintf(' RADIOWY BILANS MOCY  -  f = %.0f MHz\n', f/1e6);
 fprintf('=========================================================\n');
-fprintf(' Ptx: %g..%g dBm | G ant: %g..%g dBi | L_tor=%.1f dB | Pmin=%g dBm\n',...
-        Ptx_min,Ptx_max,G_min,G_max,L_tor,Pmin);
+fprintf(' Ptx: %g..%g dBm | Gtx: %g..%g dBi | Grx: %g..%g dBi | L_tor=%.1f dB | Pmin=%g dBm\n',...
+        Ptx_min,Ptx_max,Gtx_min,Gtx_max,Grx_min,Grx_max,L_tor,Pmin);
 fprintf('---------------------------------------------------------\n');
 fprintf('%6s | %10s %10s %10s | %8s %8s %8s\n',...
         'd[m]','Prx_min','Prx_sr','Prx_max','M_min','M_sr','M_max');
@@ -99,9 +104,9 @@ grid on; hold off;
 xlabel('Odleglosc d [km]');
 ylabel('Moc odbierana P_{rx} [dBm]');
 title(sprintf('Moc odbierana w funkcji odleglosci  (f = %.0f MHz)', f/1e6));
-legend('strata MIN (Ptx_{max}, G_{max})',...
-       'strata SR  (Ptx_{sr}, G_{sr})',...
-       'strata MAX (Ptx_{min}, G_{min})',...
+legend('strata MIN (Ptx_{max}, Gtx_{max}, Grx_{max})',...
+       'strata SR  (wartosci srednie)',...
+       'strata MAX (Ptx_{min}, Gtx_{min}, Grx_{min})',...
        'czulosc P_{min}','Location','northeast');
 
 % Wykres 2: margines mocy w funkcji odleglosci
