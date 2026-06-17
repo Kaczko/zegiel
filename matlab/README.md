@@ -9,7 +9,8 @@ wybranego zadania **nr 3 (częstotliwość 1500 MHz)**.
 |------|---------|------|
 | `bilans_radiowy.m` | **Problem 2** | Radiowy bilans mocy: moc odbierana Rx oraz margines mocy w funkcji odległości (0,5–5 km). |
 | `itu_r_p341.m` | **Problem 1** | Natężenie pola **E** i gęstość mocy **S** wg normy **ITU‑R P.341 (Annex 2)** oraz parametr **Q**. |
-| `rf_budget_analyzer.m` | **Problem 3** | Model toru w **RF Budget Analyzer** (RF Toolbox), schemat 7‑elementowy wg obrazka. |
+| `generuj_plik_mat.m` | **Problem 3** | Generator pliku **`.mat`** otwieralnego w aplikacji **RF Budget Analyzer**. |
+| `rf_budget_analyzer.m` | **Problem 3** | Model toru w **RF Budget Analyzer** (RF Toolbox), schemat 7‑elementowy wg obrazka (wersja skryptowa z wykresami). |
 | `przeszkody_radiowe.m` | **Przeszkody radiowe** | Orientacyjne tłumienie materiałów budowlanych i jego wpływ na moc odbieraną. |
 
 Uruchomienie — w katalogu `matlab/` wpisać nazwę skryptu (bez rozszerzenia), np.:
@@ -95,6 +96,28 @@ Friis‑GainT, Friis‑NF, Friis‑SNR) i rysuje je w funkcji stopnia oraz odleg
 
 > **Wymaga RF Toolbox.** Aplikację interaktywną otwiera `rfBudgetAnalyzer(b)`,
 > raport HTML — `show(b)`, a skrypt odtwarzający budżet — `exportScript(b)`.
+
+### Plik `.mat` do aplikacji RF Budget Analyzer
+
+Aplikacja RF Budget Analyzer otwiera plik `.mat` zawierający obiekt `rfbudget`.
+Obiektu tego **nie da się utworzyć poza MATLAB-em** (to klasa z RF Toolbox),
+dlatego plik generuje się jednym uruchomieniem skryptu:
+
+```matlab
+generuj_plik_mat            % tworzy rfbudget_1500MHz.mat
+```
+
+Otwarcie gotowego pliku w aplikacji (dowolny sposób):
+
+```matlab
+rfBudgetAnalyzer('rfbudget_1500MHz.mat')   % bezposrednio z pliku
+% albo
+load('rfbudget_1500MHz.mat','rfb');  show(rfb)
+% albo: APPS -> RF Budget Analyzer -> Open -> wybierz plik
+```
+
+Parametry zapisane w pliku są zgodne z bilansem (f = 1500 MHz, Gtx ≈ 9 dBi,
+Grx ≈ 14 dBi, kable 2 m + 4 m), a układ odwzorowuje 7‑elementowy schemat z obrazka.
 
 ## Przeszkody radiowe — `przeszkody_radiowe.m`
 
