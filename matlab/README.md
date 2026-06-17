@@ -8,6 +8,7 @@ wybranego zadania **nr 3 (częstotliwość 1500 MHz)**.
 | Plik | Problem | Opis |
 |------|---------|------|
 | `bilans_radiowy.m` | **Problem 2** | Radiowy bilans mocy: moc odbierana Rx oraz margines mocy w funkcji odległości (0,5–5 km). |
+| `bilans_z_przeszkodami.m` | **Problem 2 (wariant)** | Bilans mocy jak wyżej, dodatkowo uwzględnia tłumienie wybranych **przeszkód** (tabela dla 1,5 GHz). |
 | `itu_r_p341.m` | **Problem 1** | Natężenie pola **E** i gęstość mocy **S** wg normy **ITU‑R P.341 (Annex 2)** oraz parametr **Q**. |
 | `generuj_plik_mat.m` | **Problem 3** | Generator pliku **`.mat`** otwieralnego w aplikacji **RF Budget Analyzer**. |
 | `rf_budget_analyzer.m` | **Problem 3** | Model toru w **RF Budget Analyzer** (RF Toolbox), schemat 7‑elementowy wg obrazka (wersja skryptowa z wykresami). |
@@ -61,6 +62,30 @@ i wzmocnienia anten — Tx 2–16 dBi, Rx 10–18 dBi):
 
 Wynik: tabela w konsoli oraz wykresy `Prx(d)` i `M(d)` dla odległości 500 m … 5 km
 (krok 500 m), z zaznaczoną czułością odbiornika / granicą odbioru.
+
+### Wariant z przeszkodami — `bilans_z_przeszkodami.m`
+
+Ten sam bilans, ale powiększony o tłumienie wybranych **przeszkód radiowych**
+(tabela orientacyjnego tłumienia dla **1,5 GHz**). Scenariusz przeszkód definiuje
+się w zmiennej `scenariusz` (nazwa przeszkody + liczba sztuk), np. domyślnie
+2× ściana z cegły + 1× strop żelbetonowy + 1× szyba. Tłumienie przeszkód wchodzi
+do bilansu: `Prx = Ptx + Gtx + Grx − L_tor − L_przeszkód − FSPL(d)`, a punkty
+strata MIN/MAX/ŚR łączą skrajne wartości mocy, wzmocnień **i** tłumienia przeszkód.
+Na wykresie `Prx(d)` pokazana jest też linia odniesienia bez przeszkód.
+
+Tabela tłumienia dla 1,5 GHz użyta w skrypcie:
+
+| Materiał przeszkody | Tłumienie @1,5 GHz |
+|---------------------|-------------------:|
+| Drewno / płyta gipsowo-kartonowa | 1–4 dB |
+| Szkło zwykłe (pojedyncze) | 1–2 dB |
+| Cegła (zwykła ściana działowa) | 3–8 dB |
+| Pustak / beton komórkowy | 4–12 dB |
+| Szkło niskoemisyjne (powłoka metaliczna) | 8–25 dB |
+| Beton (niezbrojony) | 10–18 dB |
+| Strop żelbetonowy | 12–22 dB |
+| Beton zbrojony (ściana nośna) | 15–28 dB |
+| Metalowe drzwi / folia / lustro | 20–35+ dB |
 
 ## Problem 1 — `itu_r_p341.m`
 
