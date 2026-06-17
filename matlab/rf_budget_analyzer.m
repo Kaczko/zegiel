@@ -40,13 +40,14 @@ fprintf('FSPL(%.0f m) = %.2f dB  ->  G_lacza (el.4) = %.2f dB\n', d0, FSPL0, Gpa
 
 %% ----------------- DEFINICJA ELEMENTOW TORU (7 stopni) ------------------
 % Elementy bierne (filtry, tlumiki, lacze): NF = strata wtraceniowa = -Gain.
-filtTX = rfelement('Name','Filtr TX',     'Gain',-6.005,'NF',6.005, 'OIP3',Inf);
-attTX  = rfelement('Name','Tlumik TX',    'Gain',-3,    'NF',3,     'OIP3',Inf);
-ampTX  = amplifier('Name','Wzmacniacz TX','Gain',30,    'NF',4,     'OIP3',40);
-antena = rfelement('Name','Antena/lacze', 'Gain',Gpath, 'NF',-Gpath,'OIP3',Inf);
-ampRX  = amplifier('Name','Wzmacniacz RX (LNA)','Gain',20,'NF',2,   'OIP3',25);
-attRX  = rfelement('Name','Tlumik RX',    'Gain',-3,    'NF',3,     'OIP3',Inf);
-filtRX = rfelement('Name','Filtr RX',     'Gain',-6.005,'NF',6.005, 'OIP3',Inf);
+% Uwaga: nazwa ('Name') musi byc poprawna nazwa zmiennej (bez spacji/znakow).
+filtTX = rfelement('Name','FiltrTX',      'Gain',-6.005,'NF',6.005, 'OIP3',Inf);
+attTX  = rfelement('Name','TlumikTX',     'Gain',-3,    'NF',3,     'OIP3',Inf);
+ampTX  = amplifier('Name','WzmacniaczTX', 'Gain',30,    'NF',4,     'OIP3',40);
+antena = rfelement('Name','AntenaLacze',  'Gain',Gpath, 'NF',-Gpath,'OIP3',Inf);
+ampRX  = amplifier('Name','WzmacniaczRX', 'Gain',20,    'NF',2,     'OIP3',25);
+attRX  = rfelement('Name','TlumikRX',     'Gain',-3,    'NF',3,     'OIP3',Inf);
+filtRX = rfelement('Name','FiltrRX',      'Gain',-6.005,'NF',6.005, 'OIP3',Inf);
 
 elementy = [filtTX, attTX, ampTX, antena, ampRX, attRX, filtRX];
 
@@ -103,7 +104,7 @@ Pout_d = zeros(size(d));
 SNR_d  = zeros(size(d));
 for k = 1:numel(d)
     FSPL = 20*log10(d(k)) + 20*log10(f) + 20*log10(4*pi/c);
-    ant_k = rfelement('Name','Antena/lacze','Gain',Gtx+Grx-FSPL,...
+    ant_k = rfelement('Name','AntenaLacze','Gain',Gtx+Grx-FSPL,...
                       'NF',FSPL-Gtx-Grx,'OIP3',Inf);
     bk = rfbudget([filtTX, attTX, ampTX, ant_k, ampRX, attRX, filtRX], f, Pin, BW);
     Pout_d(k) = bk.OutputPower(end);
